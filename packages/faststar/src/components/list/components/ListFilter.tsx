@@ -38,7 +38,7 @@ const RightButton = styled.div`
     /* height: 100%; */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     padding-left: 20px;
     border-left: 1px solid var(--color-border-2);
@@ -108,7 +108,13 @@ export const ListFilter: React.FC<ListFilterProps> = React.memo((props) => {
                 <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
                     {t("faststar.list.searchForm.search")}
                 </Button>
-                <Button icon={<IconRefresh />} onClick={handleReset}>
+                <Button
+                    icon={<IconRefresh />}
+                    style={{
+                        marginTop: 20
+                    }}
+                    onClick={handleReset}
+                >
                     {t("faststar.list.searchForm.reset")}
                 </Button>
             </RightButton>

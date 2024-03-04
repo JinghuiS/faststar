@@ -1,5 +1,5 @@
 import { createResourceFactory, createTextField } from "faststar"
-export const Test = createResourceFactory({
+export const Users = createResourceFactory({
     list: {
         title: "测试表格",
         filter: [

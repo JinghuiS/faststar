@@ -1,5 +1,7 @@
+import React from "react"
+
 import { Faststar, Resource, jsonServerProvider, i18nZnTranslation } from "faststar"
-import { Test } from "./crud/Test"
+import { Users } from "./crud/Users"
 
 const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com")
 
@@ -19,7 +21,7 @@ function App() {
                 ]
             }}
         >
-            <Resource {...Test} />
+            <Resource {...Users} />
 
             {/* <CustomRoute name="user">
                 <div>这是测试</div>
