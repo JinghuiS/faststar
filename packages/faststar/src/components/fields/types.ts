@@ -14,7 +14,7 @@ export interface BasicFieldEditOptions {
 
 export interface BasicFieldOptions {
     label?: string
-    request?: (searchForm?: any) => Promise<any>
+    // request?: (searchForm?: any) => Promise<any>
     /**
      * preprocess data before transfer to render component
      */

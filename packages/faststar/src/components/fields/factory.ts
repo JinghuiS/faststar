@@ -68,8 +68,8 @@ export function createFieldFactory<CustomOptions extends {} = {}>(
                                 source
                             })
                         }
-                    },
-                    request: options?.request
+                    }
+                    // request: options?.request
                 } as ListFieldItem
             } else if (viewType === "edit" || viewType === "create") {
                 let editOptions = options?.edit ?? {}
@@ -110,8 +110,7 @@ export function createFieldFactory<CustomOptions extends {} = {}>(
                             options: options ?? {},
                             source
                         })
-                    },
-                    request: options?.request
+                    }
                 } as DetailFieldItem
             }
 

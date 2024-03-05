@@ -1,5 +1,5 @@
 import type { DataProvider } from "../types"
-import { fetchJSON, type HTTPClient } from "./request"
+import { useHttp, type HTTPClient } from "./request"
 import qs from "qs"
 import { flattenObject } from "./utils"
 
@@ -36,10 +36,7 @@ import { flattenObject } from "./utils"
  *
  * export default App;
  */
-export function jsonServerProvider(
-    apiUrl: string,
-    httpClient: HTTPClient = fetchJSON
-): DataProvider {
+export function jsonServerProvider(apiUrl: string, httpClient: HTTPClient = useHttp): DataProvider {
     return {
         getList: (resource, params) => {
             const { page, perPage } = params.pagination

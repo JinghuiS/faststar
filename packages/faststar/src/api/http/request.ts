@@ -1,6 +1,7 @@
 import wretch from "wretch"
 
 import { HttpError } from "./error"
+import { useHttpMiddleware } from "../../store/http-middleware"
 
 export interface Options extends RequestInit {
     user?: {
@@ -14,29 +15,30 @@ export function createHeadersFromOptions(options: Options): Headers {
         new Headers({
             Accept: "application/json"
         })) as Headers
-    // if (
-    //     !requestHeaders.has("Content-Type") &&
-    //     !(options && (!options.method || options.method === "GET")) &&
-    //     !(options && options.body && options.body instanceof FormData)
-    // ) {
-    //     requestHeaders.set("Content-Type", "application/json")
-    // }
-
-    if (options.user && options.user.authenticated && options.user.token) {
-        requestHeaders.set("Authorization", options.user.token)
+    if (
+        !requestHeaders.has("Content-Type") &&
+        !(options && (!options.method || options.method === "GET")) &&
+        !(options && options.body && options.body instanceof FormData)
+    ) {
+        requestHeaders.set("Content-Type", "application/json")
     }
+
+    // if (options.user && options.user.authenticated && options.user.token) {
+    //     requestHeaders.set("Authorization", options.user.token)
+    // }
 
     return requestHeaders
 }
 
-const api = wretch().errorType("json")
-export async function fetchJSON(url: string, options: Options = {}) {
+const api = wretch()
+
+export async function useHttp(url: string, options: Options = {}) {
     const requestHeaders = createHeadersFromOptions(options)
     const response = await api
-        .headers(requestHeaders)
         .options(options)
+        .options({ headers: requestHeaders })
         .errorType("json")
-        // .url(url).get()
+
         .fetch(options.method || "get", url, options.body || null)
         .res()
 
@@ -54,5 +56,6 @@ export async function fetchJSON(url: string, options: Options = {}) {
     }
     return await Promise.resolve({ status, headers, body, json })
 }
+// export const useHttp = fetchJSON
 
-export type HTTPClient = typeof fetchJSON
+export type HTTPClient = typeof useHttp
