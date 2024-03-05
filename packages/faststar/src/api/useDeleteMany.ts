@@ -18,7 +18,7 @@ import type {
     GetInfiniteListResult
 } from "./types"
 import { useResourceContext } from "../context/resource"
-import { useDataProvider } from "../context/faststar"
+import { useDataProvider } from "../context/dataProvider"
 
 /**
  * Get a callback to call the dataProvider.delete() method, the result and the loading state.

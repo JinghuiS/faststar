@@ -15,7 +15,7 @@ import type {
 } from "./types"
 
 import { useEvent } from "../hooks/useEvent"
-import { useDataProvider } from "../context/faststar"
+import { useDataProvider } from "../context/dataProvider"
 import { useResourceContext } from "../context/resource"
 
 /**

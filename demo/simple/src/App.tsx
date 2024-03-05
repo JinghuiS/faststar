@@ -1,9 +1,19 @@
 import React from "react"
 
-import { Faststar, Resource, jsonServerProvider, i18nZnTranslation } from "faststar"
+import {
+    Faststar,
+    Resource,
+    jsonServerProvider,
+    i18nZnTranslation,
+    createAuthHttpClient
+} from "faststar"
 import { Users } from "./crud/Users"
+import { createHttpMiddleware } from "faststar/src/api/http/createHttpMiddleware"
 
-const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com")
+const dataProvider = jsonServerProvider(
+    "https://jsonplaceholder.typicode.com",
+    createAuthHttpClient(createHttpMiddleware([]))
+)
 
 function App() {
     return (
@@ -22,10 +32,6 @@ function App() {
             }}
         >
             <Resource {...Users} />
-
-            {/* <CustomRoute name="user">
-                <div>这是测试</div>
-            </CustomRoute> */}
         </Faststar>
     )
 }

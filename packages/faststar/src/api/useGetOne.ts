@@ -1,5 +1,6 @@
 import { type UseQueryOptions, useQuery, type UseQueryResult } from "@tanstack/react-query"
-import { useDataProvider } from "../context/faststar"
+import { useDataProvider } from "../context/dataProvider"
+
 import type { GetOneParams, BasicRecord } from "./types"
 
 export function useGetOne<RecordType extends BasicRecord = any>(

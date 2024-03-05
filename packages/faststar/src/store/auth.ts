@@ -3,7 +3,7 @@ import { immer } from "zustand/middleware/immer"
 import { persist, createJSONStorage } from "zustand/middleware"
 interface AuthStoreState {
     // isAuthenticated: boolean
-    token?: string
+    token: string
     setToken: (token: string) => void
     clearToken: () => void
 }

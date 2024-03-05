@@ -5,11 +5,12 @@ import {
     type UseQueryResult
 } from "@tanstack/react-query"
 import { useEffect, useMemo } from "react"
-import { useDataProvider, useFaststarContext } from "../context/faststar"
+import { useFaststarContext } from "../context/faststar"
 import { useEvent } from "../hooks/useEvent"
 import type { BasicRecord, GetListParams, GetListResult } from "./types"
 import { defaultFilter, defaultSort } from "./consts"
 import { sharedEvent } from "../utils/event"
+import { useDataProvider } from "../context/dataProvider"
 
 /**
  * Call the dataProvider.getList() method and return the resolved result

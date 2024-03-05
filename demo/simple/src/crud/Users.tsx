@@ -1,7 +1,7 @@
 import { createResourceFactory, createTextField } from "faststar"
 export const Users = createResourceFactory({
     list: {
-        title: "测试表格",
+        title: "用户列表",
         filter: [
             createTextField("name", {
                 label: "名字"
@@ -25,18 +25,7 @@ export const Users = createResourceFactory({
 
             createTextField("username", {
                 label: "Username",
-                span: 12,
-                request: async (f) => {
-                    console.log(f)
-
-                    if (f.name) {
-                        return false
-                    }
-
-                    console.log("执行了")
-
-                    return await 1
-                }
+                span: 12
             }),
             createTextField("website", {
                 label: "Website"

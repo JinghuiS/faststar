@@ -16,7 +16,7 @@ import {
     type UseMutationOptions,
     type UseMutationResult
 } from "@tanstack/react-query"
-import { useDataProvider } from "../context/faststar"
+import { useDataProvider } from "../context/dataProvider"
 
 /**
  * Get a callback to call the dataProvider.update() method, the result and the loading state.

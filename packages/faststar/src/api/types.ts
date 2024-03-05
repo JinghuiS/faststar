@@ -18,6 +18,8 @@ export interface PaginationPayload {
     perPage: number
 }
 
+export type LegacyDataProvider = (type: string, resource: string, params: any) => Promise<any>
+
 export type DataProvider<ResourceType extends string = string> = {
     getList: <RecordType extends BasicRecord = any>(
         resource: ResourceType,

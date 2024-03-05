@@ -7,8 +7,9 @@ import { Outlet } from "react-router-dom"
 import styled from "styled-components"
 import { useTranslation } from "../../i18n"
 import { useFaststarContext } from "../../context/faststar"
+import { NavBar } from "./NavBar"
 // import { useTushanContext } from "../../context/tushan"
-
+const navbarHeight = 60
 const Sider = Layout.Sider
 const Header = Layout.Header
 const Footer = Layout.Footer
@@ -25,10 +26,10 @@ const Root = styled(Layout)`
         width: 100%;
         top: 0;
         left: 0;
-        z-index: 50;
-        border-bottom-width: 1px;
-        border-color: var(--color-border);
-        background-color: var(--color-bg-1);
+        z-index: 100;
+
+        min-width: 1100px;
+        height: ${navbarHeight}px;
     }
 
     .sider {
@@ -65,14 +66,15 @@ const Root = styled(Layout)`
 
 export const BasicLayout: React.FC = React.memo((props) => {
     const [collapsed, setCollapsed] = useState(false)
-    const navbarHeight = 64
     const menuWidth = collapsed ? 48 : 220
     const { t } = useTranslation()
     const { footer } = useFaststarContext()
 
     return (
         <Root className="basic-layout">
-            <Header className="header">{/* <Navbar /> */}</Header>
+            <Header className="header">
+                <NavBar />
+            </Header>
 
             <Layout>
                 <Sider
@@ -89,15 +91,15 @@ export const BasicLayout: React.FC = React.memo((props) => {
                 <Layout
                     className="content"
                     style={{
-                        paddingLeft: menuWidth
-                        // paddingTop: navbarHeight + 16,
+                        paddingLeft: menuWidth,
+                        paddingTop: navbarHeight
                     }}
                 >
                     {/* <TushanBreadcrumb /> */}
                     <Content className="body">
                         <Outlet />
                     </Content>
-                    <Footer className="footer">{footer ?? t("tushan.footer.title")}</Footer>
+                    <Footer className="footer">{footer ?? t("faststar.footer.title")}</Footer>
                 </Layout>
             </Layout>
         </Root>

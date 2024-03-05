@@ -11,12 +11,15 @@ import { createSelector } from "../utils/createSelector"
 import { BasicLayout } from "./layout"
 import { LoadingView } from "./LoadingView"
 import { useFaststarContext } from "../context/faststar"
+import { useScrollToTop } from "../hooks/useScrollToTop"
+import { useCheckAuth } from "../api/auth/useCheckAuth"
 
 export interface BuiltinRoutesProps {
     children: FaststarChildren
 }
 
 export const BuiltinRoutes: React.FC<BuiltinRoutesProps> = React.memo((props) => {
+    useScrollToTop()
     const { customRoutesWithLayout, customRoutesWithoutLayout, resources, components } =
         useConfigureAdminRouterFromChildren(props.children)
     const {
@@ -30,20 +33,17 @@ export const BuiltinRoutes: React.FC<BuiltinRoutesProps> = React.memo((props) =>
     const oneSecondHasPassed = useDelay(1000)
     const { isLogin } = useUserStore(createSelector("isLogin"))
 
-    // const checkAuth = useCheckAuth()
+    const checkAuth = useCheckAuth()
 
-    // useEffect(() => {
-    //     if (requireAuth) {
-    //         checkAuth()
-    //             .then(() => {
-    //                 setCanRender(true)
-    //             })
-    //             .catch(() => {})
-    //     }
-    // }, [checkAuth, requireAuth, isLogin])
     useEffect(() => {
-        setCanRender(true)
-    }, [])
+        if (requireAuth) {
+            checkAuth()
+                .then(() => {
+                    setCanRender(true)
+                })
+                .catch(() => {})
+        }
+    }, [checkAuth, requireAuth, isLogin])
 
     return (
         <>

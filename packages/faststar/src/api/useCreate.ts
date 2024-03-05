@@ -5,9 +5,10 @@ import {
     type UseMutationOptions,
     type UseMutationResult
 } from "@tanstack/react-query"
-import { useDataProvider } from "../context/faststar"
+
 import type { BasicRecord, CreateParams } from "./types"
 import { useEvent } from "../hooks/useEvent"
+import { useDataProvider } from "../context/dataProvider"
 
 /**
  * Get a callback to call the dataProvider.create() method, the result and the loading state.

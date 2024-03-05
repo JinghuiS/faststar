@@ -1,4 +1,5 @@
 export * from "./jsonServerProvider"
 export * from "./error"
-export { fetchJSON } from "./request"
+export { useHttp } from "./request"
 export type { HTTPClient } from "./request"
+export * from "./middleware"

@@ -5,7 +5,8 @@ import {
     type UseQueryResult,
     hashKey
 } from "@tanstack/react-query"
-import { useDataProvider } from "../context/faststar"
+import { useDataProvider } from "../context/dataProvider"
+
 import type { BasicRecord, GetManyParams } from "./types"
 
 export const useGetMany = <RecordType extends BasicRecord = any>(

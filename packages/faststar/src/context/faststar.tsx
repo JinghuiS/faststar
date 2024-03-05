@@ -43,9 +43,3 @@ FaststarContextProvider.displayName = "FaststarContextProvider"
 export function useFaststarContext(): FaststarContextProps {
     return useContext(FaststarContext)
 }
-
-export function useDataProvider() {
-    const { dataProvider = defaultDataProvider } = useFaststarContext()
-
-    return dataProvider
-}

@@ -23,7 +23,6 @@ export const Sidebar: React.FC = React.memo(() => {
     const location = useLocation()
     const { menus } = useMenuStore(createSelector("menus"))
     const { t } = useTranslation()
-    const { dashboard } = useFaststarContext()
 
     return (
         <Root
@@ -31,14 +30,6 @@ export const Sidebar: React.FC = React.memo(() => {
             selectedKeys={[location.pathname]}
             onClickMenuItem={(path) => navigate(path)}
         >
-            {dashboard !== false && (
-                <MenuItem key="/dashboard">
-                    <IconHome />
-
-                    {t("tushan.dashboard.name")}
-                </MenuItem>
-            )}
-
             {renderMenu({
                 menus,
                 t
