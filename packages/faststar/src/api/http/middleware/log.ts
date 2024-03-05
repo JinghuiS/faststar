@@ -1,7 +1,7 @@
 import type { ConfiguredMiddleware } from "wretch/types"
 import { LogService } from "../../../utils/log"
 
-export const log = (): ConfiguredMiddleware => {
+export const logMiddleware = (): ConfiguredMiddleware => {
     return (next) => (url, options) => {
         const logService = new LogService()
 
