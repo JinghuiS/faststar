@@ -50,6 +50,7 @@ import { useCreatePath } from "../../hooks/useCreatePath"
 import type { ListEditActionProps } from "./actions/EditAction"
 import type { ListDetailActionProps } from "./actions/DetailAction"
 import { ListCreateAction, type ListCreateActionProps } from "./actions/CreateAction"
+import { Helmet } from "react-helmet-async"
 
 const Header = styled.div`
     width: 100%;
@@ -266,6 +267,9 @@ const _ListTable = React.memo((props: ListTableProps) => {
 
     return (
         <ViewTypeContextProvider viewType="list">
+            <Helmet>
+                <title>{title || "Faststar"}</title>
+            </Helmet>
             <ListTableContextProvider value={{ list, total, refetch }}>
                 <ListParamsContextProvider value={listParams}>
                     <Card

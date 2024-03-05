@@ -10,6 +10,7 @@ import { useResourceContext } from "../../context/resource"
 import { useCreatePath } from "../../hooks/useCreatePath"
 import styled from "styled-components"
 import { connectRequestDataStore } from "../../context/request-data-store"
+import { Helmet } from "react-helmet-async"
 
 export interface EditPageProps {
     fields?: FieldHandler[]
@@ -60,6 +61,9 @@ export const EditPage = connectRequestDataStore((props: EditPageProps) => {
 
     return (
         <>
+            <Helmet>
+                <title>{title}</title>
+            </Helmet>
             <Spin
                 style={{ display: "block" }}
                 loading={isLoading || createOpt.isPending || updateOneOpt.isPending}
