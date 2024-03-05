@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Navigate, Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 // import { defaultAuthParams, useCheckAuth } from "../api/auth"
 
 import { useConfigureAdminRouterFromChildren } from "../hooks/useConfigureAdminRouterFromChildren"
@@ -13,6 +13,9 @@ import { LoadingView } from "./LoadingView"
 import { useFaststarContext } from "../context/faststar"
 import { useScrollToTop } from "../hooks/useScrollToTop"
 import { useCheckAuth } from "../api/auth/useCheckAuth"
+import { LoginPage } from "./login/LoginPage"
+import { defaultAuthParams } from "../api/auth/const"
+import { WelcomePage } from "./welcome/WelcomePage"
 
 export interface BuiltinRoutesProps {
     children: FaststarChildren
@@ -23,45 +26,48 @@ export const BuiltinRoutes: React.FC<BuiltinRoutesProps> = React.memo((props) =>
     const { customRoutesWithLayout, customRoutesWithoutLayout, resources, components } =
         useConfigureAdminRouterFromChildren(props.children)
     const {
+        welcome = <WelcomePage />,
         // dashboard = <Dashboard />,
         authProvider,
-        layout = <BasicLayout />
-        // loginPage = <LoginPage />
+        layout = <BasicLayout />,
+        loginPage = <LoginPage />,
+        basename
     } = useFaststarContext()
     const requireAuth = Boolean(authProvider)
     const [canRender, setCanRender] = useState(!requireAuth)
-    const oneSecondHasPassed = useDelay(1000)
+    const oneSecondHasPassed = useDelay(100)
     const { isLogin } = useUserStore(createSelector("isLogin"))
 
     const checkAuth = useCheckAuth()
+    const location = useLocation()
 
     useEffect(() => {
-        if (requireAuth) {
-            checkAuth()
+        if (requireAuth && location.pathname !== defaultAuthParams.loginUrl) {
+            checkAuth(location)
                 .then(() => {
                     setCanRender(true)
                 })
-                .catch(() => {})
+                .catch(() => {
+                    setCanRender(false)
+                })
         }
-    }, [checkAuth, requireAuth, isLogin])
+    }, [checkAuth, requireAuth, isLogin, location])
 
     return (
         <>
             <Routes>
                 {customRoutesWithoutLayout}
 
-                {/* <Route path={defaultAuthParams.loginUrl} element={loginPage} /> */}
+                <Route path={defaultAuthParams.loginUrl} element={loginPage} />
 
                 {canRender ? (
                     <Route element={layout}>
                         <Route
                             path="*"
                             element={
-                                <div>
+                                <>
                                     <Routes>
-                                        {/* {dashboard && (
-                                            <Route path="/dashboard" element={dashboard} />
-                                        )} */}
+                                        {welcome && <Route path="/welcome" element={welcome} />}
 
                                         {customRoutesWithLayout.map((item) => (
                                             <Route
@@ -79,22 +85,22 @@ export const BuiltinRoutes: React.FC<BuiltinRoutesProps> = React.memo((props) =>
                                             />
                                         ))}
 
-                                        {/* <Route
+                                        <Route
                                             path="/"
                                             element={
                                                 <Navigate
                                                     to={
-                                                        dashboard
-                                                            ? "/dashboard"
+                                                        welcome
+                                                            ? "/welcome"
                                                             : `/${resources[0].element.props.name}/`
                                                     }
                                                 />
                                             }
-                                        /> */}
+                                        />
 
                                         <Route path="*" element={<div>404</div>} />
                                     </Routes>
-                                </div>
+                                </>
                             }
                         />
                     </Route>
