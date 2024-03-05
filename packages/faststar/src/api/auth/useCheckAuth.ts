@@ -26,7 +26,7 @@ export const useCheckAuth = (): CheckAuth => {
                 if (logoutOnFailure) {
                     logout({}, error && error.redirectTo != null ? error.redirectTo : redirectTo)
 
-                    Message.error("Please login to continue")
+                    // Message.error("Please login to continue")
                 }
 
                 throw error

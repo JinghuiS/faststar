@@ -1,9 +1,9 @@
-import { Button, Form, Grid, Space } from "@arco-design/web-react"
-import React, { useEffect } from "react"
+import { Button, Form, Grid, Space, Tooltip } from "@arco-design/web-react"
+import React, { useEffect, useState } from "react"
 import { useControlledObjectState } from "../../../hooks/useObjectState"
 import type { FieldHandler } from "../../fields"
 import { get } from "lodash-es"
-import { IconRefresh, IconSearch } from "@arco-design/web-react/icon"
+import { IconCaretDown, IconCaretUp, IconRefresh, IconSearch } from "@arco-design/web-react/icon"
 import { useTranslation } from "react-i18next"
 import { styled } from "styled-components"
 import { useRequestDataStoreDataQuery } from "../../../context/request-data-store"
@@ -18,10 +18,13 @@ interface ListFilterProps {
     // rightButtonDirection?: "horizontal" | "vertical"
 }
 
-const SearchFormWrapper = styled.div`
+const SearchFormWrapper = styled.div<{ $collapsed: boolean }>`
     display: flex;
     width: 100%;
-    border-bottom: 1px solid var(--color-border-1);
+    border-bottom: 1px dashed var(--color-border-2);
+
+    transition: all 0.3s;
+    ${(props) => (props.$collapsed ? "height: 52px;overflow: hidden;" : "")}
 `
 
 const SearchForm = styled(Form)`
@@ -34,21 +37,31 @@ const SearchForm = styled(Form)`
     }
 `
 
+const SearchFormCollapsedIcon = styled.div`
+    position: absolute;
+    left: 50%;
+    bottom: -13px;
+    transform: translateX(-50%);
+    cursor: pointer;
+`
+
 const RightButton = styled.div`
     /* height: 100%; */
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
     /* justify-content: space-between; */
-    align-items: center;
+    /* align-items: center; */
+    flex: 1;
+    text-align: center;
     padding-left: 20px;
-    border-left: 1px solid var(--color-border-2);
+    border-left: 1px dashed var(--color-border-2);
     box-sizing: border-box;
     margin-bottom: 20px;
 `
 
 export const ListFilter: React.FC<ListFilterProps> = React.memo((props) => {
-    useRequestDataStoreDataQuery(props.fields, props.filterValues, props.resource)
     const [form] = useForm()
+    const [collapsed, setCollapsed] = useState(true)
     // const [filterValues, setFilterValues] = useControlledObjectState<Record<string, any>>(
     //     props.filterValues,
     //     props.onChangeFilter
@@ -74,51 +87,92 @@ export const ListFilter: React.FC<ListFilterProps> = React.memo((props) => {
     // const rightButtonDirection = props.rightButtonDirection ?? "vertical"
 
     return (
-        <SearchFormWrapper>
-            <SearchForm
-                form={form}
-                labelAlign="left"
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 19 }}
-            >
-                <Grid cols={3} colGap={24}>
-                    {props.fields.map((fieldHandler, i) => {
-                        const c = fieldHandler("edit")
-
-                        return (
-                            <Grid.GridItem key={i}>
-                                <Form.Item label={c.title} field={c.source}>
-                                    {(formData, form) =>
-                                        c.render(
-                                            get(formData, c.source),
-                                            (val) => {
-                                                // console.log(val, c.source)
-                                                form.setFieldValue(c.source, castFilterValue(val))
-                                            }
-                                            // setFilterValues({ [c.source]: castFilterValue(val) })
-                                        )
-                                    }
-                                </Form.Item>
-                            </Grid.GridItem>
-                        )
-                    })}
-                </Grid>
-            </SearchForm>
-            <RightButton>
-                <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
-                    {t("faststar.list.searchForm.search")}
-                </Button>
-                <Button
-                    icon={<IconRefresh />}
-                    style={{
-                        marginTop: 20
-                    }}
-                    onClick={handleReset}
+        <div style={{ position: "relative" }}>
+            <SearchFormWrapper $collapsed={collapsed}>
+                <SearchForm
+                    // style={{ flex: 1 }}
+                    form={form}
+                    labelAlign="left"
+                    labelCol={{ span: 5 }}
+                    wrapperCol={{ span: 19 }}
                 >
-                    {t("faststar.list.searchForm.reset")}
-                </Button>
-            </RightButton>
-        </SearchFormWrapper>
+                    <Grid cols={3} colGap={24}>
+                        {props.fields.map((fieldHandler, i) => {
+                            const c = fieldHandler("edit")
+
+                            return (
+                                <Grid.GridItem key={i}>
+                                    <Form.Item label={c.title} field={c.source}>
+                                        {(formData, form) =>
+                                            c.render(
+                                                get(formData, c.source),
+                                                (val) => {
+                                                    // console.log(val, c.source)
+                                                    form.setFieldValue(
+                                                        c.source,
+                                                        castFilterValue(val)
+                                                    )
+                                                }
+                                                // setFilterValues({ [c.source]: castFilterValue(val) })
+                                            )
+                                        }
+                                    </Form.Item>
+                                </Grid.GridItem>
+                            )
+                        })}
+                    </Grid>
+                </SearchForm>
+                <RightButton>
+                    <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
+                        {t("faststar.list.searchForm.search")}
+                    </Button>
+                    <Button
+                        icon={<IconRefresh />}
+                        style={{
+                            marginTop: 20
+                        }}
+                        onClick={handleReset}
+                    >
+                        {t("faststar.list.searchForm.reset")}
+                    </Button>
+                </RightButton>
+            </SearchFormWrapper>
+            <SearchFormCollapsedIcon>
+                <Tooltip
+                    trigger={["click", "hover"]}
+                    // popupHoverStay={false}
+                    content={
+                        collapsed
+                            ? t("faststar.list.searchForm.expand")
+                            : t("faststar.list.searchForm.collapse")
+                    }
+                >
+                    {!collapsed ? (
+                        <IconCaretUp
+                            onClick={() => {
+                                setCollapsed(!collapsed)
+                            }}
+                            style={{
+                                fontSize: 20,
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round"
+                            }}
+                        />
+                    ) : (
+                        <IconCaretDown
+                            onClick={() => {
+                                setCollapsed(!collapsed)
+                            }}
+                            style={{
+                                fontSize: 20,
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round"
+                            }}
+                        />
+                    )}
+                </Tooltip>
+            </SearchFormCollapsedIcon>
+        </div>
     )
 })
 ListFilter.displayName = "ListFilter"

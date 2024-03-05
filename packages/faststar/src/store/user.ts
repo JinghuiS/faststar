@@ -13,7 +13,12 @@ export const useUserStore = create<UserStoreState>()(
         isLogin: false,
         userIdentity: { id: "", fullName: "" },
         setIsLogin: (isLogin: boolean) => {
-            set({ isLogin })
+            set((state) => {
+                state.isLogin = isLogin
+                if (!isLogin) {
+                    state.userIdentity = { id: "", fullName: "" }
+                }
+            })
         }
     }))
 )

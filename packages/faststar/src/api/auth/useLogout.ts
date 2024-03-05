@@ -6,6 +6,7 @@ import { defaultAuthParams } from "./const"
 import { useUserStore } from "../../store/user"
 import { createSelector } from "../../utils/createSelector"
 import { useFaststarContext } from "../../context/faststar"
+import { useAuthStore } from "../../store/auth"
 
 export const useLogout = (): Logout => {
     const { authProvider } = useFaststarContext()
@@ -20,7 +21,7 @@ export const useLogout = (): Logout => {
     const locationRef = useRef(location)
     const loginUrl = defaultAuthParams.loginUrl
     const { setIsLogin } = useUserStore(createSelector("setIsLogin"))
-
+    const { clearToken } = useAuthStore(createSelector("clearToken"))
     /*
      * We need the current location to pass in the router state
      * so that the login hook knows where to redirect to as next route after login.
@@ -83,6 +84,7 @@ export const useLogout = (): Logout => {
                 queryClient.clear()
 
                 setIsLogin(false)
+                clearToken()
 
                 return redirectToFromProvider
             }),

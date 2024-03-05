@@ -12,7 +12,7 @@ export const DEFAULT_FASTSTAR_CONTEXT: FaststarContextProps = {
 export interface FaststarContextProps {
     basename?: string
     routerType?: "browser" | "hash"
-    dashboard?: React.ReactElement | false
+    welcome?: React.ReactElement | false
     dataProvider?: DataProvider
     authProvider?: AuthProvider
     i18n?: {

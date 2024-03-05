@@ -14,6 +14,7 @@ export function useDelay(ms = 0, key = "") {
         setReady(false)
         const timer = setTimeout(() => {
             setReady(true)
+            clearTimeout(timer)
         }, ms)
 
         return () => {

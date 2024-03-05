@@ -272,21 +272,10 @@ const _ListTable = React.memo((props: ListTableProps) => {
             </Helmet>
             <ListTableContextProvider value={{ list, total, refetch }}>
                 <ListParamsContextProvider value={listParams}>
-                    <Card
-                        style={{
-                            borderRadius: 4
-                            // padding: 20
-                        }}
-                        className={props.className}
-                    >
-                        {headerEl}
-
-                        {/* {hasHeader && <Divider />} */}
-
-                        {tableEl}
-
-                        {drawerEl}
-                    </Card>
+                    {headerEl}
+                    {/* {hasHeader && <Divider />} */}
+                    {tableEl}
+                    {drawerEl}
                 </ListParamsContextProvider>
             </ListTableContextProvider>
         </ViewTypeContextProvider>

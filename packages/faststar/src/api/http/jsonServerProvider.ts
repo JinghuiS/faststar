@@ -38,6 +38,7 @@ import { flattenObject } from "./utils"
  */
 export function jsonServerProvider(apiUrl: string, httpClient: HTTPClient = useHttp): DataProvider {
     return {
+        httpClient,
         getList: (resource, params) => {
             const { page, perPage } = params.pagination
             const { field, order } = params.sort

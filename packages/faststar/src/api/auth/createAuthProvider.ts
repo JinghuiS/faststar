@@ -1,3 +1,5 @@
+import { useAuthStore } from "../../store/auth"
+import { useHttp } from "../http"
 import type { AuthProvider } from "../types"
 import { defaultAuthStorageKey } from "./const"
 
@@ -17,21 +19,28 @@ interface CreateAuthProviderOptions {
     loginUrl: string
 }
 
-export function createAuthProvider(options: CreateAuthProviderOptions): AuthProvider {
+export function createAuthProvider(
+    http = useHttp,
+    options: CreateAuthProviderOptions
+): AuthProvider {
     const { authStorageKey = defaultAuthStorageKey, loginUrl } = options
-
     const authProvider: AuthProvider = {
         login: async ({ username, password }) => {
-            const request = new Request(loginUrl, {
-                method: "POST",
-                body: JSON.stringify({ username, password }),
-                headers: new Headers({ "Content-Type": "application/json" })
-            })
+            // const request = new Request(loginUrl, {
+            //     method: "POST",
+            //     body: JSON.stringify({ username, password }),
+            //     headers: new Headers({ "Content-Type": "application/json" })
+            // })
 
             try {
-                const response = await fetch(request)
+                const response = await http(loginUrl, {
+                    method: "POST",
+                    body: JSON.stringify({ username, password }),
+                    headers: new Headers({ "Content-Type": "application/json" })
+                })
                 const auth = await response.json()
-                localStorage.setItem(authStorageKey, JSON.stringify(auth))
+                useAuthStore.setState({ token: auth.token })
+                return Promise.resolve(auth)
             } catch {
                 throw new Error("Login Failed")
             }
@@ -41,17 +50,24 @@ export function createAuthProvider(options: CreateAuthProviderOptions): AuthProv
             return Promise.resolve()
         },
         checkAuth: () => {
-            const auth = localStorage.getItem(authStorageKey)
-            if (auth) {
-                try {
-                    const obj = JSON.parse(auth)
-                    if (obj.expiredAt && Date.now() < obj.expiredAt) {
-                        return Promise.resolve()
-                    }
-                } catch (err) {}
-            }
+            // const auth = localStorage.getItem(authStorageKey)
+            const auth = useAuthStore.getState().token
 
-            return Promise.reject()
+            if (auth) {
+                return Promise.resolve()
+            } else {
+                return Promise.reject()
+            }
+            // if (auth) {
+            //     try {
+            //         const obj = JSON.parse(auth)
+            //         if (obj.expiredAt && Date.now() < obj.expiredAt) {
+            //             return Promise.resolve()
+            //         }
+            //     } catch (err) {}
+            // }
+
+            return Promise.resolve()
         },
         checkError: (error) => {
             const status = error.status
@@ -64,14 +80,14 @@ export function createAuthProvider(options: CreateAuthProviderOptions): AuthProv
             return Promise.resolve()
         },
         getIdentity: () => {
-            const { username } = JSON.parse(localStorage.getItem(authStorageKey) ?? "{}")
-            if (!username) {
-                return Promise.reject()
-            }
+            // const { username } = JSON.parse(localStorage.getItem(authStorageKey) ?? "{}")
+            // if (!username) {
+            //     return Promise.reject()
+            // }
 
             return Promise.resolve({
-                id: username,
-                fullName: username
+                id: "username",
+                fullName: "username"
             })
         },
         getPermissions: () => Promise.resolve("")

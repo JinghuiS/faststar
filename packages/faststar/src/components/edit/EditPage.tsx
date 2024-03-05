@@ -11,6 +11,7 @@ import { useCreatePath } from "../../hooks/useCreatePath"
 import styled from "styled-components"
 import { connectRequestDataStore } from "../../context/request-data-store"
 import { Helmet } from "react-helmet-async"
+import { PageCard } from "../layout/PageCard"
 
 export interface EditPageProps {
     fields?: FieldHandler[]
@@ -74,10 +75,11 @@ export const EditPage = connectRequestDataStore((props: EditPageProps) => {
                     // subTitle="This is a description"
                     backIcon
                     onBack={back}
-                >
-                    <EditForm gutter={gutter} fields={fields || []} form={form} record={record} />
-                </PageHeader>
+                />
 
+                <PageCard>
+                    <EditForm gutter={gutter} fields={fields || []} form={form} record={record} />
+                </PageCard>
                 <ActionBox>
                     <Space>
                         <SubmitButton type="primary" onClick={handleSubmit}>

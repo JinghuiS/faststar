@@ -2,6 +2,7 @@ import React from "react"
 import { ResourceContextProvider } from "../../context/resource"
 import { ListTable, type ListTableProps } from "../list"
 import { EditPage, type EditPageProps } from "../edit"
+import { ListPage } from "../list/ListPage"
 export interface CreateResourceFactoryReturn {
     list: React.ComponentType<any>
     create: React.ComponentType<any>
@@ -22,7 +23,7 @@ function makeListPage(config: CreateResourceFactoryConfig) {
     return () => {
         return (
             <ResourceContextProvider resourceName={config.name}>
-                <ListTable {...config.list} />
+                <ListPage {...config.list} />
             </ResourceContextProvider>
         )
     }
